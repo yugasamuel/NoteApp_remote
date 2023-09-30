@@ -16,8 +16,9 @@ class ViewController: UITableViewController {
         title = "NoteApp"
         
         let createNote = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createNewNote))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
-        toolbarItems = [createNote]
+        toolbarItems = [flexibleSpace, createNote]
         navigationController?.isToolbarHidden = false
         
         loadNotes()

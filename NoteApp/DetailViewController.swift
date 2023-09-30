@@ -28,20 +28,33 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func deleteNote() {
-        notes.remove(at: index)
-        saveNotes()
+        if textView.text != "" {
+            let ac = UIAlertController(title: "Delete note", message: "Are you sure want to delete note?", preferredStyle: .alert)
+            
+            let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+                self?.notes.remove(at: self!.index)
+                self?.saveNotes()
+                self?.navigationController?.popViewController(animated: true)
+            }
+            
+            ac.addAction(deleteAction)
+            ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            present(ac, animated: true)
+        }
     }
     
     @objc func shareNote() {
-        guard let message = textView.text else { return }
-        let vc = UIActivityViewController(activityItems: [message], applicationActivities: [])
-        
-        if let popoverPresentationController = vc.popoverPresentationController {
-            popoverPresentationController.sourceView = view
-            popoverPresentationController.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
-            popoverPresentationController.permittedArrowDirections = []
+        if textView.text != "" {
+            guard let message = textView.text else { return }
+            let vc = UIActivityViewController(activityItems: [message], applicationActivities: [])
+            
+            if let popoverPresentationController = vc.popoverPresentationController {
+                popoverPresentationController.sourceView = view
+                popoverPresentationController.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
+                popoverPresentationController.permittedArrowDirections = []
+            }
+            present(vc, animated: true)
         }
-        present(vc, animated: true)
     }
     
     func textViewDidChange(_ textView: UITextView) {
