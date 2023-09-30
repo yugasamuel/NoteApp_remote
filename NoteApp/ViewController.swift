@@ -15,7 +15,24 @@ class ViewController: UITableViewController {
         
         title = "NoteApp"
         
+        let createNote = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createNewNote))
+
+        toolbarItems = [createNote]
+        navigationController?.isToolbarHidden = false
+        
         loadNotes()
+    }
+    
+    @objc func createNewNote() {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
+            let newNote = Note(text: "")
+            notes.append(newNote)
+            
+            vc.note = newNote
+            vc.notes = notes
+            
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     func loadNotes() {
