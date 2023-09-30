@@ -9,5 +9,5 @@ import Foundation
 
 struct Note: Identifiable, Codable {
     var id = UUID()
-    var note: String
+    var text: String
 }

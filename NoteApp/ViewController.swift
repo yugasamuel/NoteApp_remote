@@ -15,7 +15,23 @@ class ViewController: UITableViewController {
         
         title = "NoteApp"
         
-        notes.append(Note(note: "Sylvi"))
+        loadNotes()
+    }
+    
+    func loadNotes() {
+        do {
+            let data = try Data(contentsOf: FileManager.savePath)
+            notes = try JSONDecoder().decode([Note].self, from: data)
+        } catch {
+            notes.append(Note(text: "Sylvi"))
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        loadNotes()
+        tableView.reloadData()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -26,7 +42,7 @@ class ViewController: UITableViewController {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "Note")
         
         var content = cell.defaultContentConfiguration()
-        content.text = notes[indexPath.row].note
+        content.text = notes[indexPath.row].text
         
         cell.contentConfiguration = content
         
@@ -35,7 +51,8 @@ class ViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
-            vc.initialNote = notes[indexPath.row].note
+            vc.notes = notes
+            vc.note = notes[indexPath.row]
             
             navigationController?.pushViewController(vc, animated: true)
         }

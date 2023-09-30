@@ -73,7 +73,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="note" destination="c9E-cA-I2j" id="mFD-JX-yH5"/>
+                        <outlet property="textView" destination="c9E-cA-I2j" id="z2b-Dw-Fli"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b3H-YI-Lbw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

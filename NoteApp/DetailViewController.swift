@@ -7,17 +7,34 @@
 
 import UIKit
 
-class DetailViewController: UIViewController {
-    @IBOutlet var note: UITextView!
-    var initialNote: String!
+class DetailViewController: UIViewController, UITextViewDelegate {
+    @IBOutlet var textView: UITextView!
+    var notes: [Note]!
+    var note: Note!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        note.text = initialNote
+        textView.delegate = self
+        textView.text = note.text
     }
     
+    func textViewDidChange(_ textView: UITextView) {
+        saveNotes()
+    }
 
+    func saveNotes() {
+        guard let index = notes.firstIndex(where: { $0.id == note.id }) else { return }
+        notes[index].text = textView.text
+        
+        do {
+            let data = try JSONEncoder().encode(notes)
+            try data.write(to: FileManager.savePath)
+        } catch {
+            print("Cannot save notes.")
+        }
+    }
+    
     /*
     // MARK: - Navigation
 
