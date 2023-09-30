@@ -11,6 +11,7 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var textView: UITextView!
     var notes: [Note]!
     var note: Note!
+    var index: Int!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,13 +23,13 @@ class DetailViewController: UIViewController, UITextViewDelegate {
         
         textView.delegate = self
         textView.text = note.text
+        
+        index = notes.firstIndex(where: { $0.id == note.id })
     }
     
     @objc func deleteNote() {
-        if let index = notes.firstIndex(where: { $0.id == note.id }) {
-            notes.remove(at: index)
-            saveNotes()
-        }
+        notes.remove(at: index)
+        saveNotes()
     }
     
     @objc func shareNote() {
@@ -44,13 +45,11 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
+        notes[index].text = textView.text
         saveNotes()
     }
     
     func saveNotes() {
-        guard let index = notes.firstIndex(where: { $0.id == note.id }) else { return }
-        notes[index].text = textView.text
-        
         do {
             let data = try JSONEncoder().encode(notes)
             try data.write(to: FileManager.savePath)
